@@ -1,9 +1,11 @@
-import request from '@/utils/request'
+import request, {fetcher} from '@/utils/request'
+import useSWR from "swr";
 
-
-export const apiSetting = async () => {
-    return request({
-        url: '/public/settings',
-        method: 'get',
-    })
+export const apiSetting =  () => {
+    const {data, error, isLoading} = useSWR('/api/public/settings', fetcher)
+    return {
+        data: data,
+        isLoading: isLoading,
+        isError: error
+    }
 }

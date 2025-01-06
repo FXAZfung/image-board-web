@@ -1,6 +1,8 @@
 "use client";
 import {apiLogin} from '@/api/auth';
-import {createContext, useContext, useEffect, useState} from 'react';
+import {createContext, useContext, useEffect, useLayoutEffect, useState} from 'react';
+import {getToken, isExpire, removeAuth, setAuth} from "@/utils/auth";
+import {toast} from "sonner";
 
 // 创建 Context
 const AuthContext = createContext(undefined);
@@ -10,20 +12,28 @@ export function AuthProvider({children}) {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
 
     // 检查本地存储中的登录状态
-    useEffect(() => {
-        const token = JSON.parse(localStorage.getItem('token'))?.token || JSON.parse(sessionStorage.getItem('token'))?.token;
-        setIsAuthenticated(!!token);
+    useLayoutEffect(() => {
+        const token = getToken();
+        if (!token) {
+            setIsAuthenticated(false);
+            return;
+        }
+        if (isExpire()) {
+            removeAuth()
+            setIsAuthenticated(false);
+            toast.error('登录状态已过期，请重新登录');
+            return;
+        }
+        setIsAuthenticated(true);
     }, []);
 
     const login = async (username, password, remember) => {
         if (!username || !password) {
             throw new Error('用户名和密码不能为空');
         }
-
         try {
             const res = await apiLogin(username, password);
-            const storage = remember ? localStorage : sessionStorage;
-            storage.setItem('token', JSON.stringify(res));
+            setAuth(res, remember);
             setIsAuthenticated(true);
             return res;
         } catch (err) {
@@ -32,8 +42,7 @@ export function AuthProvider({children}) {
     };
 
     const logout = () => {
-        localStorage.removeItem('token');
-        sessionStorage.removeItem('token');
+        removeAuth()
         setIsAuthenticated(false);
     };
 

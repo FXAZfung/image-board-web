@@ -6,7 +6,7 @@ export function tansParams(params) {
     let result = ''
     for (const propName of Object.keys(params)) {
         const value = params[propName]
-        var part = encodeURIComponent(propName) + '='
+        const part = encodeURIComponent(propName) + '=';
         if (value !== null && value !== '' && typeof value !== 'undefined') {
             if (typeof value === 'object') {
                 for (const key of Object.keys(value)) {
@@ -16,7 +16,7 @@ export function tansParams(params) {
                         typeof value[key] !== 'undefined'
                     ) {
                         let params = propName + '[' + key + ']'
-                        var subPart = encodeURIComponent(params) + '='
+                        const subPart = encodeURIComponent(params) + '=';
                         result += subPart + encodeURIComponent(value[key]) + '&'
                     }
                 }
@@ -26,4 +26,28 @@ export function tansParams(params) {
         }
     }
     return result
+}
+
+export function debounce(fn, delay) {
+    let timer = null
+    return function () {
+        if (timer) {
+            clearTimeout(timer)
+        }
+        timer = setTimeout(() => {
+            fn.apply(this, arguments)
+        }, delay)
+    }
+}
+
+export function throttle(fn, delay) {
+    let canRun = true
+    return function () {
+        if (!canRun) return
+        canRun = false
+        setTimeout(() => {
+            fn.apply(this, arguments)
+            canRun = true
+        }, delay)
+    }
 }

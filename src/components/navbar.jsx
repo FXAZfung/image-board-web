@@ -3,16 +3,16 @@ import ToggleTheme from "@/components/toggle-theme";
 
 
 const navMap = [
-    { name: "首页", url: "/" },
-    { name: "展览", url: "/" },
-    { name: "控制台", url: "/dashboard" },
+    {name: "首页", url: "/"},
+    {name: "展览", url: "/exhibition"},
+    {name: "控制台", url: "/dashboard"},
 ];
 
 
 export default async function Navbar() {
-
     return (
-        <nav className=" shadow-lg fixed top-0 w-full z-10 flex items-center justify-between px-4 py-2 h-16 md:px-8">
+        <nav
+            className="container sticky top-0 bg-background z-10 flex items-center justify-between px-4 py-2 h-16 md:px-8">
             <div className="flex items-center gap-2">
                 <img
                     width={40}
@@ -28,7 +28,8 @@ export default async function Navbar() {
                     src={"/apple-touch-icon-dark.png"}
                     className="relative border-2 border-transparent h-8 w-8 object-cover object-top hidden dark:block "
                 />
-                IM 图床</div>
+                IM 图床
+            </div>
             <div className="flex items-center gap-5">
                 <ul className="flex items-center space-x-4">
                     {navMap.map((item, index) => (
@@ -39,7 +40,7 @@ export default async function Navbar() {
                         </li>
                     ))}
                 </ul>
-                <ToggleTheme />
+                <ToggleTheme/>
             </div>
         </nav>
     );

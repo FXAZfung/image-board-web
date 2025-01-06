@@ -13,6 +13,7 @@ import {useAuth} from "@/context/auth-context"
 import {useRouter} from "next/navigation"
 import {useEffect} from "react";
 import {toast} from "sonner";
+import ToggleTheme from "@/components/toggle-theme";
 
 
 export default function DashBoardLayout({children}) {
@@ -34,20 +35,23 @@ export default function DashBoardLayout({children}) {
         <SidebarProvider>
             <AppSidebar/>
             <SidebarInset>
-                <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-                    <SidebarTrigger className="-ml-1"/>
-                    <Separator orientation="vertical" className="mr-2 h-4"/>
-                    <Breadcrumb>
-                        <BreadcrumbList>
-                            <BreadcrumbItem>
-                                <BreadcrumbLink href="/">首页</BreadcrumbLink>
-                            </BreadcrumbItem>
-                            <BreadcrumbSeparator/>
-                            <BreadcrumbItem>
-                                <BreadcrumbLink href="/dashboard">控制台</BreadcrumbLink>
-                            </BreadcrumbItem>
-                        </BreadcrumbList>
-                    </Breadcrumb>
+                <header className="flex h-16 shrink-0 items-center gap-2 border-b px-8 justify-between">
+                    <div className="flex items-center gap-2">
+                        <SidebarTrigger className="-ml-1"/>
+                        <Separator orientation="vertical" className="mr-2 h-4"/>
+                        <Breadcrumb>
+                            <BreadcrumbList>
+                                <BreadcrumbItem>
+                                    <BreadcrumbLink href="/">首页</BreadcrumbLink>
+                                </BreadcrumbItem>
+                                <BreadcrumbSeparator/>
+                                <BreadcrumbItem>
+                                    <BreadcrumbLink href="/dashboard">控制台</BreadcrumbLink>
+                                </BreadcrumbItem>
+                            </BreadcrumbList>
+                        </Breadcrumb>
+                    </div>
+                    <ToggleTheme/>
                 </header>
                 {children}
             </SidebarInset>

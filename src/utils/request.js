@@ -1,20 +1,50 @@
 import axios from 'axios';
 import error from './error';
-import { toast } from "sonner";
+import {tansParams} from "@/utils/method";
+import {getToken} from "@/utils/auth";
+
 const request = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
     timeout: 10000,
 });
 
+export const fetcher = (url) =>
+    fetch(url)
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error(res.statusText)
+            }
+            return res.json()
+        })
+        .then((data) => data.data)
+        .catch((err) => {
+            console.error(err)
+            throw err
+        })
+
+export const fetchWithToken = (url) =>
+    fetch(url, {
+        headers: {
+            Authorization: getToken(),
+        },
+    })
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error(res.statusText)
+            }
+            return res.json()
+        })
+        .then((data) => data.data)
+        .catch((err) => {
+            console.error(err)
+            throw err
+        })
+
 request.interceptors.request.use(
     (config) => {
-        const isToken = (config.headers || {}).token === true
-
-        if (isToken) {
-            //TODO 从本地存储中获取token
+        if (config.headers.token) {
+            config.headers.Authorization = getToken()
+            delete config.headers.token
         }
         // get请求映射params参数
         if (config.method === 'get' && config.params) {
@@ -26,6 +56,7 @@ request.interceptors.request.use(
         return config;
     },
     (error) => {
+        console.log(error);
         return Promise.reject(error);
     }
 );
@@ -43,12 +74,12 @@ request.interceptors.response.use(
         }
         if (code === 200) {
             return Promise.resolve(response.data.data)
-        } else {
-            return Promise.reject(message)
+        } else if (code === 401) {
+            return Promise.reject('请先登录')
         }
     },
     (error) => {
-        toast.error(message)
+        console.log(error);
         return Promise.reject(error);
     }
 );
