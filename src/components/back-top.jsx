@@ -27,9 +27,9 @@ export default function BackTop() {
     }, []);
 
     return (
-        <div className="fixed bottom-4 right-4">
+        <div className=" fixed bottom-8 right-8">
             {isVisible && (
-                <Button variant="outline" size="icon" onClick={scrollToTop}>
+                <Button className="rounded-full" variant="outline" size="icon" onClick={scrollToTop}>
                     <ArrowUpToLine />
                 </Button>
             )}

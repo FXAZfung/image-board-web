@@ -61,9 +61,10 @@ export default function UploadCard() {
                 formData.append("category", data.category);
             }
             if (data.shortLink) {
-                formData.append("shortLink", data.shortLink);
+                formData.append("short_link", data.shortLink);
             }
-            await apiUploadImage(formData);
+            const response = await apiUploadImage(formData);
+            toast.success("上传成功, 短链: " + response);
         } catch (err) {
             console.log(err);
             toast.error(err);

@@ -1,6 +1,6 @@
 "use client"
 
-import React, {createContext, useContext, useEffect, useState} from "react"
+import React, {createContext, useContext, useEffect, useLayoutEffect, useState} from "react"
 import {apiSetting} from "@/api/setting";
 
 const SettingContext = createContext(undefined)
@@ -10,16 +10,18 @@ export function SettingProvider({children}) {
 
     const {data} = apiSetting()
 
-    useEffect(() => {
+
+    useLayoutEffect(() => {
         if (data) {
             setSetting(data)
+            localStorage.setItem('setting', JSON.stringify(data))
         }
-    }, []);
+    }, [data]);
 
-    return <SettingContext.Provider value={{setting, setSetting}}>{children}</SettingContext.Provider>
+    return <SettingContext.Provider value={{setting}}>{children}</SettingContext.Provider>
 }
 
-export function useStatus() {
+export function useSetting() {
     const context = useContext(SettingContext)
     if (context === undefined) {
         throw new Error("useStatus must be used within a StatusProvider")

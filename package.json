@@ -32,6 +32,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.1",
+    "react-medium-image-zoom": "^5.2.13",
+    "react-zoom-pan-pinch": "^3.6.1",
     "remark": "^15.0.1",
     "remark-highlight.js": "^7.0.1",
     "remark-html": "^16.0.1",

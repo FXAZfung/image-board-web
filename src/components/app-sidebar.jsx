@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import {Calendar, Home, Inbox, Search, Settings, User} from "lucide-react"
 
 import {
     Sidebar,
@@ -17,27 +17,37 @@ import Link from "next/link"
 
 // Menu items.
 const items = [
-    {
-        title: "首页",
-        url: "/",
-        icon: Home,
-    },
+    // {
+    //     title: "首页",
+    //     url: "/",
+    //     icon: Home,
+    // },
     {
         title: "控制台",
-        url: "/dashboard",
+        url: "/dashboard/",
         icon: Inbox,
     },
-    {
-        title: "展览",
-        url: "/exhibition",
-        icon: Search,
-    },
+    // {
+    //     title: "展览",
+    //     url: "/exhibition",
+    //     icon: Search,
+    // },
 
     {
         title: "设置",
-        url: "/setting",
-        icon: Calendar,
+        url: "/dashboard/setting",
+        icon: Settings,
     },
+    {
+        title:"用户",
+        url:"/dashboard/user",
+        icon:User,
+    },
+    {
+        title:"图片",
+        url:"/dashboard/image",
+        icon:Calendar,
+    }
 ]
 
 export function AppSidebar() {

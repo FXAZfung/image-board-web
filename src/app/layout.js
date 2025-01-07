@@ -1,4 +1,3 @@
-import {Geist, Geist_Mono} from "next/font/google";
 import "@/styles/globals.css";
 import {Toaster} from "@/components/ui/sonner";
 import {ThemeProvider} from "@/components/theme-provider";
@@ -8,23 +7,12 @@ import request from "@/utils/request";
 import BackTop from "@/components/back-top";
 
 
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
-});
-
-
 const setting = await request.get('/public/settings')
 
 export const metadata = {
     manifest: "/site.webmanifest",
     title: setting.site_title,
-    description: setting.site_description,
+    description: setting.announcement,
 };
 
 export const viewport = {

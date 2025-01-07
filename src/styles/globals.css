@@ -11,6 +11,11 @@ body {
     @apply mx-auto max-w-6xl w-full;
 }
 
+.announcement{
+    a{
+        @apply text-base text-primary hover:underline underline-offset-4;
+    }
+}
 
 @layer base {
     :root {

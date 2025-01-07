@@ -12,7 +12,6 @@ import {Separator} from "@/components/ui/separator"
 import {useAuth} from "@/context/auth-context"
 import {useRouter} from "next/navigation"
 import {useEffect} from "react";
-import {toast} from "sonner";
 import ToggleTheme from "@/components/toggle-theme";
 
 
@@ -43,6 +42,10 @@ export default function DashBoardLayout({children}) {
                             <BreadcrumbList>
                                 <BreadcrumbItem>
                                     <BreadcrumbLink href="/">首页</BreadcrumbLink>
+                                </BreadcrumbItem>
+                                <BreadcrumbSeparator/>
+                                <BreadcrumbItem>
+                                    <BreadcrumbLink href="/exhibition">展览</BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator/>
                                 <BreadcrumbItem>

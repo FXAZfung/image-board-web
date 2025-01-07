@@ -1,9 +1,9 @@
 "use client";
-import Image from "next/image";
 import useSWRInfinite from "swr/infinite";
 import {fetcher} from "@/utils/request";
 import {useEffect, useRef} from "react";
 import {throttle} from "@/utils/method";
+import ImageWrapper from "@/components/image-wrapper";
 
 const getKey = (pageIndex, previousPageData) => {
     if (previousPageData && !previousPageData.length) return null; // 已经到最后一页
@@ -16,6 +16,7 @@ export default function Page() {
         initialSize: 2,
     });
     const isFetching = useRef(false);
+
 
     useEffect(() => {
         const handleScroll = () => {
@@ -37,18 +38,12 @@ export default function Page() {
         return "loading...";
     }
 
-    const resolveImage = (image) => {
-        return "http://localhost:4536/api/public/images/" + image.file_name;
-    };
-
     return (
         <>
             <div className="container columns-2 md:columns-3 lg:columns-4 gap-0">
                 {data.map((images, index) => {
                     return images.map(image =>
-                        <Image className="p-1" key={image.id} src={resolveImage(image)} width={image.width}
-                               height={image.height}
-                               alt={image.file_name}/>
+                        <ImageWrapper key={image.id} image={image}/>
                     );
                 })}
             </div>
