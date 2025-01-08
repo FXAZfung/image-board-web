@@ -47,7 +47,13 @@ const items = [
         title:"图片",
         url:"/dashboard/image",
         icon:Calendar,
-    }
+    },
+    {
+        title:"分类",
+        url:"/dashboard/category",
+        icon:Search,
+    },
+    
 ]
 
 export function AppSidebar() {

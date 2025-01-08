@@ -4,6 +4,7 @@ import {fetcher} from "@/utils/request";
 import {useEffect, useRef} from "react";
 import {throttle} from "@/utils/method";
 import ImageWrapper from "@/components/image-wrapper";
+import Loader from "@/components/loader";
 
 const getKey = (pageIndex, previousPageData) => {
     if (previousPageData && !previousPageData.length) return null; // 已经到最后一页
@@ -35,7 +36,7 @@ export default function Page() {
     }, [size, setSize]);
 
     if (!data || isLoading) {
-        return "loading...";
+        return <Loader/>;
     }
 
     return (

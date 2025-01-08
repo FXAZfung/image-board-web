@@ -16,6 +16,7 @@ export default function Index() {
     useEffect(() => {
         const id = toast(<div className="announcement" dangerouslySetInnerHTML={{__html: setting?.announcement}}></div>, {
             duration: 3000,
+            position: "bottom-left",
         });
         return () => {
             toast.dismiss(id);
