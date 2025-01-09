@@ -24,7 +24,7 @@ export default function DashBoardLayout({children}) {
         if (!isAuthenticated && isAuthenticated !== null) {
             router.push("/login");
         }
-    }, [])
+    }, [isAuthenticated, router]);
 
     if (!isAuthenticated) {
         return null;

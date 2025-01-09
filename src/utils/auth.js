@@ -5,7 +5,7 @@ export function isExpire() {
 }
 
 export function getAuth() {
-    return JSON.parse(localStorage.getItem('auth')) || JSON.parse(sessionStorage.getItem('auth'));
+    return JSON.parse(localStorage.getItem('auth')) || sessionStorage.getItem('auth');
 }
 
 export function getToken() {

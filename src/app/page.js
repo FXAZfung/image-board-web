@@ -1,26 +1,24 @@
 "use client";
-import {Button} from "@/components/ui/button";
-
-import Link from "next/link";
+import {useEffect} from "react";
 import Intro from "@/components/intro";
 import UploadCard from "@/components/upload-card";
+import {Button} from "@/components/ui/button";
 import {useSetting} from "@/context/setting-context";
-import {useEffect} from "react";
 import {toast} from "sonner";
-
+import Link from 'next/link';
 
 export default function Index() {
-
-    const {setting} = useSetting()
+    const {setting} = useSetting();
 
     useEffect(() => {
-        const id = toast(<div className="announcement" dangerouslySetInnerHTML={{__html: setting?.announcement}}></div>, {
-            duration: 3000,
-            position: "bottom-left",
-        });
-        return () => {
-            toast.dismiss(id);
-        };
+        const toastId = toast(
+            <div className="announcement" dangerouslySetInnerHTML={{__html: setting?.announcement}}></div>,
+            {
+                duration: 3000,
+                position: "bottom-left",
+            }
+        );
+        return () => toast.dismiss(toastId);
     }, [setting]);
 
     return (
@@ -31,12 +29,10 @@ export default function Index() {
                 <div className="flex items-center justify-center gap-5">
                     <UploadCard/>
                     <Button asChild>
-                        <Link href="/exhibition">
-                            立即进入
-                        </Link>
+                        <Link href="/exhibition">立即进入</Link>
                     </Button>
                 </div>
             </div>
         </div>
-    )
+    );
 }

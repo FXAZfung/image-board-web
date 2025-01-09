@@ -1,24 +1,38 @@
 import Image from "next/image";
-import Zoom from 'react-medium-image-zoom';
+import {Controlled as ControlledZoom} from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css';
-import {useLayoutEffect, useState} from "react";
+import {useCallback, useEffect, useLayoutEffect, useState} from "react";
 import {Button} from "@/components/ui/button";
 
 export default function ImageWrapper({image}) {
+    const [quality, setQuality] = useState(1);
+    const [isZoomed, setIsZoomed] = useState(false);
 
+    const handleZoomChange = useCallback(shouldZoom => {
+        setIsZoomed(shouldZoom);
+    }, []);
 
     const resolveImage = (image) => {
         return "http://localhost:4536/api/public/images/" + image.file_name;
     }
 
+
+    useEffect(() => {
+        if (isZoomed) {
+            setQuality(100);
+        } else {
+            setQuality(5);
+        }
+    }, [isZoomed]);
+
     return (
         <div>
-            <Zoom ZoomContent={CustomZoomContent}>
-                <Image className="p-1" key={image.id} src={resolveImage(image)} width={image.width}
+            <ControlledZoom isZoomed={isZoomed} ZoomContent={CustomZoomContent} onZoomChange={handleZoomChange}>
+                <Image quality={quality} className="p-1" key={image.id} src={resolveImage(image)} width={image.width}
                        height={image.height}
                        alt={image.file_name}
                 />
-            </Zoom>
+            </ControlledZoom>
         </div>
     )
 }
@@ -27,9 +41,6 @@ const CustomZoomContent = ({
                                buttonUnzoom, // default unzoom button
                                modalState,   // current state of the zoom modal: UNLOADED, LOADING, LOADED, UNLOADING
                                img,          // your image, prepped for zooming
-                               //onUnzoom,   // unused here, but a callback to manually unzoom the image and
-                               //   close the modal if you want to use your own buttons or
-                               //   listeners in your custom experience
                            }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -40,6 +51,7 @@ const CustomZoomContent = ({
             setIsModalOpen(false)
         }
     }, [modalState])
+
 
     return <div className="bg-background w-full h-full">
         <Button variant="outline" asChild>
