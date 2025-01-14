@@ -2,6 +2,7 @@
 
 import React, {createContext, useContext, useEffect, useLayoutEffect, useState, ReactNode} from "react"
 import {apiSetting} from "@/api/setting";
+import {Setting} from "@/types/types";
 
 interface SettingContextType {
     setting: any;
@@ -10,7 +11,7 @@ interface SettingContextType {
 const SettingContext = createContext<SettingContextType | undefined>(undefined);
 
 export function SettingProvider({children}: {children: ReactNode}) {
-    const [setting, setSetting] = useState(null)
+    const [setting, setSetting] = useState<null | Setting>(null)
 
     const {data} = apiSetting()
 

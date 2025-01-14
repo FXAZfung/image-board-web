@@ -9,35 +9,27 @@ const request = axios.create({
 });
 
 export const fetcher = (url: string) =>
-    fetch(url)
-        .then((res) => {
-            if (!res.ok) {
-                throw new Error(res.statusText);
-            }
-            return res.json();
+    request.get(url)
+        .then((response) => {
+            return response;
         })
-        .then((data) => data.data)
-        .catch((err) => {
-            console.error(err);
-            throw err;
+        .catch((error) => {
+            console.error('Fetcher error:', error);
+            throw error;
         });
 
-export const fetchWithToken = (url: string) =>
-    fetch(url, {
+export const fetcherWithToken = (url: string) =>
+    request.get(url, {
         headers: {
-            Authorization: getToken(),
+            token: true,
         },
     })
-        .then((res) => {
-            if (!res.ok) {
-                throw new Error(res.statusText);
-            }
-            return res.json();
+        .then((response) => {
+            return response;
         })
-        .then((data) => data.data)
-        .catch((err) => {
-            console.error(err);
-            throw err;
+        .catch((error) => {
+            console.error('Fetcher error:', error);
+            throw error;
         });
 
 request.interceptors.request.use(

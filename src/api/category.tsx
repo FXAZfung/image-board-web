@@ -15,7 +15,7 @@ export const apiCreateCategory = (data:CategoryRequest) => {
 }
 
 export const apiGetCategories = () => {
-    const {data, error, isLoading} = useSWR('/api/public/categories', fetcher)
+    const {data, error, isLoading} = useSWR('/public/categories', fetcher)
     return {
         data: data,
         isLoading: isLoading,

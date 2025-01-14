@@ -14,7 +14,7 @@ export const apiUploadImage = async (data: FormData) => {
 }
 
 export const apiGetImages = (page:number, pageSize:number) => {
-    const {data, error, isLoading} = useSWR(`/api/public/images?page=${page}&page_size=${pageSize}`, fetcher)
+    const {data, error, isLoading} = useSWR(`/public/images?page=${page}&page_size=${pageSize}`, fetcher)
 
     return {
         data: data,

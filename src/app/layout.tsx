@@ -8,11 +8,16 @@ import BackTop from "@/components/back-top";
 import {Setting} from "@/types/types";
 import React from "react";
 
-const setting = await request.get('/public/settings') as Setting;
 
-export const metadata = {
-    title: setting.site_title,
-    description: setting.index_title,
+// 定义 generateMetadata 函数
+export async function generateMetadata() {
+    // 异步获取设置数据
+    const setting = await request.get('/public/settings') as Setting;
+
+    return {
+        title: setting.site_title,
+        description: setting.index_title,
+    };
 }
 
 export const viewport = {
