@@ -55,3 +55,10 @@ export type LoginRequest = {
     username: string
     password: string
 }
+
+export type Info = {
+    category_count: number
+    image_count: number
+    storage_usage: number
+    user_count: number
+}

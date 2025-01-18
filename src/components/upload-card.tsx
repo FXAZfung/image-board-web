@@ -36,6 +36,7 @@ import { apiUploadImage } from "@/api/image";
 import { apiGetCategories } from "@/api/category";
 import { useAuth } from "@/context/auth-context";
 import { Category, ImageRequest } from "@/types/types";
+import {PlusCircle} from "lucide-react";
 
 /*
   1. 将表单验证的 schema 抽离到组件外部，保持代码简洁。
@@ -50,7 +51,7 @@ const uploadSchema = z.object({
     shortLink: z.string().optional(),
 });
 
-export default function UploadCard() {
+export default function UploadCard({children}: {children: React.ReactNode}) {
     const router = useRouter();
     const { isAuthenticated } = useAuth();
 
@@ -106,9 +107,7 @@ export default function UploadCard() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="outline">
-                    {isLoading ? "加载中..." : "上传图片"}
-                </Button>
+                {children}
             </DialogTrigger>
 
             <DialogContent className="sm:max-w-[425px]">

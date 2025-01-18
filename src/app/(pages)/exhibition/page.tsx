@@ -1,14 +1,12 @@
 "use client";
-import { useRef, useEffect, useCallback, useState } from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import useSWRInfinite from "swr/infinite";
-import { fetcher } from "@/utils/request";
-import { throttle } from "@/utils/method";
+import {fetcherPage} from "@/utils/request";
+import {throttle} from "@/utils/method";
 import ImagePreview from "@/components/image-preview";
 import Loader from "@/components/loader";
-import { Image } from "@/types/types";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
+import {Image} from "@/types/types";
+import {Input} from "@/components/ui/input";
 
 /**
  * SWR key generator:
@@ -16,18 +14,22 @@ import { Input } from "@/components/ui/input";
  * - Otherwise, increment the page index.
  */
 const getKey = (pageIndex: number, previousPageData: Image[]) => {
-    if (previousPageData && !previousPageData.length) return null; // no more data
-    return `/public/images?page=${pageIndex + 1}&page_size=10`;
+    if (previousPageData && !previousPageData.length) return null; // 没有更多数据
+    return {url: "/public/images", pageIndex, pageSize: 10}; // POST 的 URL 和页码
 };
+
 
 export default function Page() {
     const [loadingMore, setLoadingMore] = useState(false);
     const [searchTerm, setSearchTerm] = useState(""); // 搜索关键词
-    const { data, size, setSize, isLoading, isValidating } = useSWRInfinite(getKey, fetcher, {
-        revalidateFirstPage: false,
-        initialSize: 2, // how many pages to load initially
-        onSuccess: () => setLoadingMore(false),
-    });
+    //TODO 优化代码
+    const {data, size, setSize, isLoading, isValidating} = useSWRInfinite(
+        getKey, ({url, pageIndex, pageSize}) => fetcherPage(url, pageIndex + 1, pageSize), // 使用解构后的 URL 和分页参数
+        {
+            revalidateFirstPage: false,
+            initialSize: 2, // 初始加载页数
+            onSuccess: () => setLoadingMore(false),
+        });
 
     const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
@@ -67,29 +69,14 @@ export default function Page() {
 
     // If data is undefined or still fetching the initial pages, show a page-wide loader
     if (!data || isLoading) {
-        return <Loader />;
+        return <Loader/>;
     }
-
-    // 过滤图片数据
-    const filteredImages = data.flat().filter((image) =>
-        image.file_name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
 
     return (
         <div className="container mx-auto p-4">
-            {/* 搜索框 */}
-            <div className="mb-4">
-                <Input
-                    placeholder="搜索图片"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="max-w-sm"
-                />
-            </div>
-
             {/* 瀑布流图片展示 */}
             <div className="gap-1 columns-2 md:columns-3 lg:columns-4">
-                {filteredImages.map((image) => (
+                {data.flat().map((image) => (
                     <div key={image.id} className=" break-inside-avoid">
                         <ImagePreview
                             url={image.file_name}
@@ -104,7 +91,7 @@ export default function Page() {
             {/* 加载更多提示 */}
             <div ref={loadMoreRef} className="h-20 flex justify-center items-center">
                 {loadingMore || isValidating ? (
-                    <Loader />
+                    <Loader/>
                 ) : (
                     <p className="text-sm text-gray-500">没有更多图片了</p>
                 )}

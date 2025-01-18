@@ -1,16 +1,18 @@
 "use client";
-import { useEffect, useState } from "react";
-import { apiSaveSetting } from "@/api/setting";
-import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { z } from "zod";
-import {SubmitHandler, useForm} from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { useSetting } from "@/context/setting-context";
-import { toast } from "sonner";
-import { Setting, SettingRequest } from "@/types/types";
+import {useEffect, useState} from "react";
+import {apiSaveSetting} from "@/api/setting";
+import {Input} from "@/components/ui/input";
+import {Form, FormControl, FormField, FormItem, FormLabel} from "@/components/ui/form";
+import {z} from "zod";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {Button} from "@/components/ui/button";
+import {useSetting} from "@/context/setting-context";
+import {toast} from "sonner";
+import {Setting, SettingRequest} from "@/types/types";
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
+import {Badge} from "@/components/ui/badge";
+import {ImagePlus} from "lucide-react";
 
 // 表单校验规则
 const schema = z.object({
@@ -26,11 +28,11 @@ const schema = z.object({
 
 
 // 抽离表单字段组件
-const FormFieldInput = ({ name, label, control }: { name: string; label: string; control: any }) => (
+const FormFieldInput = ({name, label, control}: { name: string; label: string; control: any }) => (
     <FormField
         name={name}
         control={control}
-        render={({ field }) => (
+        render={({field}) => (
             <FormItem>
                 <FormLabel>{label}</FormLabel>
                 <FormControl>
@@ -42,7 +44,7 @@ const FormFieldInput = ({ name, label, control }: { name: string; label: string;
 );
 
 export default function Page() {
-    const { setting } = useSetting();
+    const {setting} = useSetting();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const form = useForm({
@@ -71,7 +73,7 @@ export default function Page() {
 
     // 解析 Setting 为 SettingRequest[]
     const resolveSetting = (setting: Setting): SettingRequest[] => {
-        return Object.entries(setting).map(([key, value]) => ({ key, value }));
+        return Object.entries(setting).map(([key, value]) => ({key, value}));
     };
 
     // 保存设置
@@ -89,37 +91,45 @@ export default function Page() {
     };
 
     // 表单提交
-    const onSubmit = async (formData:Setting) => {
+    const onSubmit = async (formData: Setting) => {
         await saveSetting(formData);
     };
 
     return (
-        <div className="p-8 w-full h-full">
-            <div className="flex items-start gap-2 mb-6">
-                <h1 className="text-2xl font-bold">站点设置</h1>
-                <Badge variant="outline" className="font-bold">
-                    {setting?.version}
-                </Badge>
+        <div className="p-6 space-y-6">
+            <div className="flex justify-between items-center">
+                <h1 className="text-3xl font-bold tracking-tight">设置管理</h1>
             </div>
-            <Form {...form}>
-                <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)}>
-                    <div className="grid grid-cols-3 gap-4">
-                        <FormFieldInput name="site_title" label="站点名称" control={form.control} />
-                        <FormFieldInput name="announcement" label="站点描述" control={form.control} />
-                        <FormFieldInput name="index_title" label="首页标题" control={form.control} />
-                        <FormFieldInput name="index_description" label="首页描述" control={form.control} />
-                        <FormFieldInput name="logo" label="站点 Logo" control={form.control} />
-                        <FormFieldInput name="favicon" label="站点 Favicon" control={form.control} />
-                        <FormFieldInput name="default_page_size" label="默认分页大小" control={form.control} />
-                        <FormFieldInput name="robots_txt" label="robots.txt" control={form.control} />
-                    </div>
-                    <div>
-                        <Button type="submit" disabled={isSubmitting}>
-                            {isSubmitting ? "保存中..." : "保存"}
-                        </Button>
-                    </div>
-                </form>
-            </Form>
+            <Card className="container mx-auto py-4">
+                <CardHeader>
+                    <CardTitle>站点设置</CardTitle>
+                    <CardDescription><Badge>{setting?.version}</Badge></CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)}>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <FormFieldInput name="site_title" label="站点名称" control={form.control}/>
+                                <FormFieldInput name="announcement" label="站点描述" control={form.control}/>
+                                <FormFieldInput name="index_title" label="首页标题" control={form.control}/>
+                                <FormFieldInput name="index_description" label="首页描述" control={form.control}/>
+                                <FormFieldInput name="logo" label="站点 Logo" control={form.control}/>
+                                <FormFieldInput name="favicon" label="站点 Favicon" control={form.control}/>
+                                <FormFieldInput name="default_page_size" label="默认分页大小" control={form.control}/>
+                                <FormFieldInput name="robots_txt" label="robots.txt" control={form.control}/>
+                            </div>
+                            <div className="mt-4">
+                                <Button type="submit" disabled={isSubmitting}>
+                                    {isSubmitting ? "保存中..." : "保存"}
+                                </Button>
+                            </div>
+                        </form>
+                    </Form>
+                </CardContent>
+                <CardFooter>
+                    <p className="text-xs text-gray-500">保存后请清除缓存以查看更改</p>
+                </CardFooter>
+            </Card>
         </div>
-    );
+    )
 }

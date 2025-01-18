@@ -7,6 +7,7 @@ import { useSetting } from "@/context/setting-context";
 import { toast } from "sonner";
 import Link from "next/link";
 import Loader from "@/components/loader";
+import { LogIn } from 'lucide-react';
 
 // 抽离 AnnouncementToast 组件
 const AnnouncementToast = ({ announcement }: { announcement: string }) => {
@@ -25,8 +26,10 @@ const MainContent = ({ setting }: { setting: any }) => {
             <div className="text-3xl font-bold">{setting.index_title}</div>
             <div className="text-center">{setting.index_description}</div>
             <div className="flex items-center justify-center gap-4">
-                <UploadCard />
-                <Button asChild>
+                <UploadCard>
+                    <Button variant="outline">上传图片</Button>
+                </UploadCard>
+                <Button>
                     <Link href="/exhibition">立即进入</Link>
                 </Button>
             </div>

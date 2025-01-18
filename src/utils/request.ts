@@ -32,6 +32,22 @@ export const fetcherWithToken = (url: string) =>
             throw error;
         });
 
+// TODO 优化代码
+// fetcher 的返回值只需要提取 `content`
+export const fetcherPage = (url: string, pageIndex: number,pageSize:number) => {
+    return request.post(url, {
+        page: pageIndex,
+        per_page: pageSize,
+    }).then((response) => {
+        return response.content
+    }).catch(
+        (error) => {
+            console.error('Fetcher error:', error);
+            throw error;
+        }
+    )
+};
+
 request.interceptors.request.use(
     (config) => {
         if (config.headers.token) {

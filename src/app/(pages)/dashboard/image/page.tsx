@@ -2,7 +2,7 @@
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { Image } from "@/types/types";
-import { fetcher } from "@/utils/request";
+import {fetcher, fetcherPage} from "@/utils/request";
 import useSWR from "swr";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,18 +12,25 @@ import { ImagePlus, Filter, Search } from "lucide-react";
 import { useState } from "react";
 import Loader from "@/components/loader";
 import { toast } from "sonner";
+import useSWRInfinite from "swr/infinite";
+
+const getKey = (pageIndex: number, previousPageData: Image[]) => {
+    if (previousPageData && !previousPageData.length) return null; // 没有更多数据
+    return {url: "/public/images", pageIndex, pageSize: 12}; // POST 的 URL 和页码
+};
 
 export default function Page() {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("all");
-    const pageSize = 12;
 
-    // 获取分页数据,添加搜索和筛选参数
-    const { data, error, isLoading, mutate } = useSWR<Image[]>(
-        `/public/images?page=${page}&page_size=${pageSize}&search=${search}&filter=${filter}`,
-        fetcher
-    );
+    //TODO 优化代码
+    const {data,error,size, setSize, isLoading, isValidating,mutate} = useSWRInfinite(
+        getKey, ({url, pageIndex, pageSize}) => fetcherPage(url, pageIndex + 1, pageSize), // 使用解构后的 URL 和分页参数
+        {
+            revalidateFirstPage: false,
+        });
+
 
     const handleSearch = (value: string) => {
         setSearch(value);
@@ -34,6 +41,11 @@ export default function Page() {
         setFilter(value);
         setPage(1);
     };
+
+    const handlePage = (page: number) => {
+        setPage(page);
+        setSize(page);
+    }
 
     const handleUpload = async () => {
         // 处理上传逻辑
@@ -86,14 +98,14 @@ export default function Page() {
                     </div>
                 ) : (
                     <>
-                        <DataTable columns={columns} data={data || []} />
+                        <DataTable columns={columns} data={data[page - 1] || []} />
                         <div className="mt-4 flex items-center justify-between">
                             <div className="text-sm text-muted-foreground">
-                                总共 {data?.length || 0} 张图片
+                                总共 {data[page - 1]?.length || 0} 张图片
                             </div>
                             <div className="flex items-center gap-2">
                                 <Button
-                                    onClick={() => setPage(page - 1)}
+                                    onClick={() => handlePage(page - 1)}
                                     disabled={page === 1}
                                     variant="outline"
                                     size="sm"
@@ -102,8 +114,8 @@ export default function Page() {
                                 </Button>
                                 <span className="text-sm">第 {page} 页</span>
                                 <Button
-                                    onClick={() => setPage(page + 1)}
-                                    disabled={!data?.length || data.length < pageSize}
+                                    onClick={() => handlePage(page + 1)}
+                                    disabled={!data[page - 1]?.length || data[page - 1].length < 12}
                                     variant="outline"
                                     size="sm"
                                 >

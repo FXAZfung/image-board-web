@@ -13,7 +13,6 @@ import { useAuth } from "@/context/auth-context";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import ToggleTheme from "@/components/toggle-theme";
-import { Loader2 } from "lucide-react";
 import Loader from "@/components/loader";
 
 // 抽离头部组件

@@ -55,3 +55,21 @@ export function throttle(fn: Function, delay: number) {
 export function resolveImageUrl(url: string) {
     return process.env.NEXT_PUBLIC_API_URL + "/public/images/" + url
 }
+
+// 自动转换内存单位 初始单位为byte
+export function formatMemory(memory: number) {
+    let unit = 'B'
+    if (memory >= 1024) {
+        memory = memory / 1024
+        unit = 'KB'
+    }
+    if (memory >= 1024) {
+        memory = memory / 1024
+        unit = 'MB'
+    }
+    if (memory >= 1024) {
+        memory = memory / 1024
+        unit = 'GB'
+    }
+    return memory.toFixed(2) + unit
+}
