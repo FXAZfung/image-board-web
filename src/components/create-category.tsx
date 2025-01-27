@@ -8,7 +8,7 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
@@ -99,6 +99,7 @@ export default function CreateCategory() {
                                 render={({field}) => (
                                     <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                                         <FormLabel>是否公开</FormLabel>
+                                        <FormDescription>开启则游客也可见</FormDescription>
                                         <FormControl>
                                             <Checkbox
                                                 checked={field.value}
@@ -114,6 +115,7 @@ export default function CreateCategory() {
                                 render={({field}) => (
                                     <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                                         <FormLabel>是否随机</FormLabel>
+                                        <FormDescription>开启则加入随机图片列表</FormDescription>
                                         <FormControl>
                                             <Checkbox
                                                 checked={field.value}

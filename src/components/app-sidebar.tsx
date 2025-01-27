@@ -1,11 +1,11 @@
-import {Calendar,Image, BookImage,Home, Inbox, Search, Settings, User} from "lucide-react"
+import {BookImage, Calendar, Image, Inbox, Settings, User} from "lucide-react"
 
 import {
     Sidebar,
     SidebarContent,
+    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
-    SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
@@ -28,21 +28,21 @@ const items = [
         icon: Settings,
     },
     {
-        title:"用户",
-        url:"/dashboard/user",
-        icon:User,
+        title: "用户",
+        url: "/dashboard/user",
+        icon: User,
     },
     {
-        title:"图片",
-        url:"/dashboard/image",
-        icon:Image,
+        title: "图片",
+        url: "/dashboard/image",
+        icon: Image,
     },
     {
-        title:"分类",
-        url:"/dashboard/category",
-        icon:BookImage,
+        title: "分类",
+        url: "/dashboard/category",
+        icon: BookImage,
     },
-    
+
 ]
 
 export function AppSidebar() {
@@ -80,7 +80,7 @@ export function AppSidebar() {
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton asChild>
                                         <Link href={item.url}>
-                                            <item.icon />
+                                            <item.icon/>
                                             <span>{item.title}</span>
                                         </Link>
                                     </SidebarMenuButton>
@@ -90,7 +90,9 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-            <SidebarRail />
+            <SidebarFooter>
+            </SidebarFooter>
+            <SidebarRail/>
         </Sidebar>
     )
 }

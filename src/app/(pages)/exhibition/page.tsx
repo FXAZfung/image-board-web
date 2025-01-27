@@ -13,12 +13,15 @@ import {Input} from "@/components/ui/input";
  * - If the previous fetch returns an empty array, it implies no more data.
  * - Otherwise, increment the page index.
  */
+
 const getKey = (pageIndex: number, previousPageData: Image[]) => {
     if (previousPageData && !previousPageData.length) return null; // 没有更多数据
     return {url: "/public/images", pageIndex, pageSize: 10}; // POST 的 URL 和页码
 };
 
-
+// TODO
+// - 分类筛选图片
+// - 复制图片BBCODE / Markdown
 export default function Page() {
     const [loadingMore, setLoadingMore] = useState(false);
     const [searchTerm, setSearchTerm] = useState(""); // 搜索关键词

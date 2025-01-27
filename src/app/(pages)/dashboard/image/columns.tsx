@@ -1,18 +1,19 @@
 "use client";
-import { ColumnDef } from "@tanstack/react-table";
-import { Image } from "@/types/types";
-import { Button } from "@/components/ui/button";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { Copy, Eye, Trash2 } from "lucide-react";
+import {ColumnDef} from "@tanstack/react-table";
+import {Image} from "@/types/types";
+import {Button} from "@/components/ui/button";
+import {HoverCard, HoverCardContent, HoverCardTrigger} from "@/components/ui/hover-card";
+import {Copy, Eye, Trash2} from "lucide-react";
 import ImageComponent from "next/image";
-import { resolveImageUrl } from "@/utils/method";
+import {resolveImageUrl} from "@/utils/method";
 import ImagePreview from "@/components/image-preview";
+import {toast} from "sonner";
 
 export const columns: ColumnDef<Image>[] = [
     {
         accessorKey: "preview",
         header: "预览",
-        cell: ({ row }) => {
+        cell: ({row}) => {
             const img = row.original;
             return (
                 <HoverCard>
@@ -45,8 +46,8 @@ export const columns: ColumnDef<Image>[] = [
     {
         accessorKey: "category",
         header: "分类",
-        cell: ({ row }) => (
-            <div >
+        cell: ({row}) => (
+            <div>
                 {row.original.category || "全部"}
             </div>
         ),
@@ -54,8 +55,8 @@ export const columns: ColumnDef<Image>[] = [
     {
         accessorKey: "content_type",
         header: "图片类型",
-        cell: ({ row }) => (
-            <div >
+        cell: ({row}) => (
+            <div>
                 {row.original.content_type}
             </div>
         ),
@@ -63,25 +64,25 @@ export const columns: ColumnDef<Image>[] = [
     {
         accessorKey: "width",
         header: "宽度",
-        cell: ({ row }) => (
-            <div >{row.original.width}</div>
+        cell: ({row}) => (
+            <div>{row.original.width}</div>
         ),
     },
     {
         accessorKey: "height",
         header: "高度",
-        cell: ({ row }) => (
-            <div >{row.original.height}</div>
+        cell: ({row}) => (
+            <div>{row.original.height}</div>
         ),
     },
     {
         accessorKey: "image",
         header: "图片",
-        cell: ({ row }) => {
+        cell: ({row}) => {
             const image = row.original;
             return (
                 <ImagePreview
-                    className="size-20 rounded-md"
+                    className="size-20 rounded-md object-cover"
                     width={image.width}
                     height={image.height}
                     url={image.file_name}
@@ -93,38 +94,44 @@ export const columns: ColumnDef<Image>[] = [
     {
         accessorKey: "created_at",
         header: "上传时间",
-        cell: ({ row }) => (
-            <div >
+        cell: ({row}) => (
+            <div>
                 {new Date(row.original.created_at).toLocaleString()}
             </div>
         ),
     },
     {
         id: "actions",
-        cell: ({ row }) => {
+        cell: ({row}) => {
+            const img = row.original;
             return (
                 <div className="flex items-center gap-2">
                     <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => navigator.clipboard.writeText(row.original.url)}
+                        onClick={() => {
+                            toast.success("已复制链接到剪切板");
+                            navigator.clipboard.writeText(resolveImageUrl(img.file_name))
+                        }
+                        }
                     >
-                        <Copy className="h-4 w-4" />
+                        <Copy className="h-4 w-4"/>
                     </Button>
                     <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => window.open(row.original.url, '_blank')}
+                        onClick={() => window.open(resolveImageUrl(img.file_name), '_blank')}
                     >
-                        <Eye className="h-4 w-4" />
+                        <Eye className="h-4 w-4"/>
                     </Button>
                     <Button
                         variant="ghost"
                         size="icon"
                         className="text-red-500 hover:text-red-700"
-                        onClick={() => {/* 处理删除 */ }}
+                        onClick={() => {/* 处理删除 */
+                        }}
                     >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4"/>
                     </Button>
                 </div>
             );

@@ -53,7 +53,7 @@ export function throttle(fn: Function, delay: number) {
 }
 
 export function resolveImageUrl(url: string) {
-    return process.env.NEXT_PUBLIC_API_URL + "/public/images/" + url
+    return "http://localhost:4536"+ "/images/image/" + url
 }
 
 // 自动转换内存单位 初始单位为byte

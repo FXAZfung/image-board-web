@@ -14,7 +14,7 @@ const nextConfig = {
                 protocol: 'http',
                 hostname: 'localhost',
                 port: '4536',
-                pathname: '/api/public/images/**',
+                pathname: '/images/**',
                 search: '',
             },
         ],

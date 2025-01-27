@@ -1,18 +1,18 @@
 "use client";
-import { columns } from "./columns";
-import { DataTable } from "./data-table";
-import { Image } from "@/types/types";
-import {fetcher, fetcherPage} from "@/utils/request";
-import useSWR from "swr";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
-import { Card } from "@/components/ui/card";
-import { ImagePlus, Filter, Search } from "lucide-react";
-import { useState } from "react";
+import {columns} from "./columns";
+import {DataTable} from "./data-table";
+import {Image} from "@/types/types";
+import {fetcherPage} from "@/utils/request";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
+import {Select} from "@/components/ui/select";
+import {Card} from "@/components/ui/card";
+import {ImagePlus, Search} from "lucide-react";
+import {useState} from "react";
 import Loader from "@/components/loader";
-import { toast } from "sonner";
+import {toast} from "sonner";
 import useSWRInfinite from "swr/infinite";
+import UploadCard from "@/components/upload-card";
 
 const getKey = (pageIndex: number, previousPageData: Image[]) => {
     if (previousPageData && !previousPageData.length) return null; // 没有更多数据
@@ -25,7 +25,7 @@ export default function Page() {
     const [filter, setFilter] = useState("all");
 
     //TODO 优化代码
-    const {data,error,size, setSize, isLoading, isValidating,mutate} = useSWRInfinite(
+    const {data, error, size, setSize, isLoading, isValidating, mutate} = useSWRInfinite(
         getKey, ({url, pageIndex, pageSize}) => fetcherPage(url, pageIndex + 1, pageSize), // 使用解构后的 URL 和分页参数
         {
             revalidateFirstPage: false,
@@ -61,16 +61,18 @@ export default function Page() {
             <Card className="p-6">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-bold">图片管理</h2>
-                    <Button onClick={handleUpload}>
-                        <ImagePlus className="mr-2 h-4 w-4" />
-                        上传图片
-                    </Button>
+                    <UploadCard>
+                        <Button>
+                            <ImagePlus className="mr-2 h-4 w-4"/>
+                            上传图片
+                        </Button>
+                    </UploadCard>
                 </div>
 
                 <div className="flex gap-4 mb-6">
                     <div className="flex-1">
                         <div className="relative">
-                            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground"/>
                             <Input
                                 placeholder="搜索图片..."
                                 className="pl-8"
@@ -83,22 +85,22 @@ export default function Page() {
                         value={filter}
                         onValueChange={handleFilter}
                         items={[
-                            { label: "全部", value: "all" },
-                            { label: "已使用", value: "used" },
-                            { label: "未使用", value: "unused" }
+                            {label: "全部", value: "all"},
+                            {label: "已使用", value: "used"},
+                            {label: "未使用", value: "unused"}
                         ]}
                     />
                 </div>
 
                 {isLoading ? (
-                    <Loader />
+                    <Loader/>
                 ) : error ? (
                     <div className="text-center text-red-500 p-4">
                         加载失败,请稍后重试
                     </div>
                 ) : (
                     <>
-                        <DataTable columns={columns} data={data[page - 1] || []} />
+                        <DataTable columns={columns} data={data[page - 1] || []}/>
                         <div className="mt-4 flex items-center justify-between">
                             <div className="text-sm text-muted-foreground">
                                 总共 {data[page - 1]?.length || 0} 张图片
